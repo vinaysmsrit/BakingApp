@@ -2,68 +2,85 @@ package com.vinaysmsrit.bakingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.vinaysmsrit.bakingapp.model.Post;
+import com.vinaysmsrit.bakingapp.adapter.RecipeListAdapter;
+import com.vinaysmsrit.bakingapp.model.Recipe;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeListAdapter.RecipeItemClickListener {
 
-    TextView mPostsView;
+    @BindView(R.id.recipes_recyclerview)
+    RecyclerView mRecyclerView;
+
+    RecipeAPI mRecipeAPI;
+    RecipeListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPostsView = findViewById(R.id.posts_tv);
+        ButterKnife.bind(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com")
+                .baseUrl("https://d17h27t6h515a5.cloudfront.net")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        RecipeAPI recipeAPI = retrofit.create(RecipeAPI.class);
+        mRecipeAPI = retrofit.create(RecipeAPI.class);
 
-        Call<List<Post>> call = recipeAPI.getPosts();
+        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
 
-        call.enqueue(new Callback<List<Post>>() {
+        mAdapter = new RecipeListAdapter(this);
+
+        mRecyclerView.setAdapter(mAdapter);
+
+        getAllRecipes();
+    }
+
+    private void getAllRecipes() {
+        Call<List<Recipe>> call = mRecipeAPI.getRecipes();
+
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
 
                 if(!response.isSuccessful()) {
-                    mPostsView.setText("Response Failed Code: "+response.code());
+                    Log.d("VIN","Response Failed Code: "+response.code());
                     return;
                 }
 
-                List<Post> posts = response.body();
-
-                for(Post post: posts) {
-                    mPostsView.append(" id:"+post.getId()+"\n");
-                    mPostsView.append(" userId:"+post.getUserId()+"\n");
-                    mPostsView.append(" title:"+post.getTitle()+"\n");
-                    mPostsView.append(" body:"+post.getText()+"\n\n");
-                }
-
-
+                List<Recipe> recipeList = response.body();
+                mAdapter.setRecipeList(recipeList);
             }
 
             @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                 mPostsView.setText("Error Retriving Posts");
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Log.d("VIN","Error Retriving Posts");
             }
         });
+    }
 
-
-
-
-
+    @Override
+    public void onItemClick(Recipe recipe) {
+        if (recipe != null) {
+            Toast.makeText(this,"Item Clicked Recipe : "+recipe.getId()+" name:"+recipe.getName(),Toast.LENGTH_LONG).show();
+        }
     }
 }
