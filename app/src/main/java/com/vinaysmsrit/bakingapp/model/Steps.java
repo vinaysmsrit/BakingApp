@@ -72,6 +72,10 @@ public class Steps implements Parcelable {
         parcel.writeString(videoURL);
         parcel.writeString(thumbnailURL);
     }
+
+    public String toString() {
+        return shortDescription;
+    }
 }
 
 

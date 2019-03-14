@@ -1,5 +1,6 @@
 package com.vinaysmsrit.bakingapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     public void onItemClick(Recipe recipe) {
         if (recipe != null) {
             Toast.makeText(this,"Item Clicked Recipe : "+recipe.getId()+" name:"+recipe.getName(),Toast.LENGTH_LONG).show();
+            Intent recipeActivityIntent = new Intent(MainActivity.this,RecipeListActivity.class);
+            recipeActivityIntent.putExtra(RecipeUtil.RECIPE_DETAIL_EXTRA,recipe);
+            startActivity(recipeActivityIntent);
         }
     }
 }
