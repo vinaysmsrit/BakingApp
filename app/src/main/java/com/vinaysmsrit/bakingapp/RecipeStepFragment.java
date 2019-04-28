@@ -1,11 +1,13 @@
 package com.vinaysmsrit.bakingapp;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,15 +46,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class RecipeStepFragment extends Fragment implements View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = RecipeUtil.APP_TAG+RecipeStepFragment.class.getSimpleName();
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     Recipe mRecipe;
     Steps mCurStep;
@@ -63,6 +57,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
     private TrackSelector trackSelector;
     private SimpleExoPlayer exoPlayer;
     private long position = 0;
+    private boolean mTwoPane;
 
     @BindView(R.id.step_details)
     TextView mDescriptionView;
@@ -104,6 +99,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         ButterKnife.bind(this,view);
         mStepsCount = mRecipe.getSteps().size();
 
+        mTwoPane = getResources().getBoolean(R.bool.twoPane);
 
         mNextButton.setOnClickListener(this);
         mPrevButton.setOnClickListener(this);
@@ -129,8 +125,26 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         Log.d(TAG,"onViewCreated VideoUrl: "+mCurStep.getVideoURL()+"\n" +
                 " Description:"+mCurStep.getDescription());
 
-        mShortDescription.setText(mCurStep.getShortDescription());
-        mDescriptionView.setText(mCurStep.getDescription());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane) {
+            showFullScreen();
+        } else {
+            mShortDescription.setText(mCurStep.getShortDescription());
+            mDescriptionView.setText(mCurStep.getDescription());
+        }
+    }
+
+    private void showFullScreen() {
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            //Use Google's "LeanBack" mode to get fullscreen in landscape
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }
     }
 
     @Override

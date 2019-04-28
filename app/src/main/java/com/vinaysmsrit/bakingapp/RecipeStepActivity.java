@@ -29,15 +29,17 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepF
     }
 
     private void setupStepFragment(int position,Recipe recipe) {
-        setTitle(recipe.getName());
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(RecipeUtil.RECIPE_INFO,recipe);
-        arguments.putInt(RecipeUtil.STEP_POSITION,position);
-        RecipeStepFragment fragment = new RecipeStepFragment();
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.recipe_step_container, fragment)
-                .commit();
+        if (recipe != null) {
+            setTitle(recipe.getName());
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(RecipeUtil.RECIPE_INFO,recipe);
+            arguments.putInt(RecipeUtil.STEP_POSITION,position);
+            RecipeStepFragment fragment = new RecipeStepFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.recipe_step_container, fragment)
+                    .commit();
+        }
     }
 
     @Override

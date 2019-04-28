@@ -2,6 +2,7 @@ package com.vinaysmsrit.bakingapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
 
     Recipe mRecipe;
     boolean mTwoPane;
+    private int mCurStepPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +37,19 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
         if (intent.hasExtra(RecipeUtil.RECIPE_INFO)) {
             Log.d(TAG," RECIPE_INFO conatined ");
             mRecipe = getIntent().getParcelableExtra(RecipeUtil.RECIPE_INFO);
+        } else if (savedInstanceState != null){
+            mRecipe = savedInstanceState.getParcelable(RecipeUtil.RECIPE_INFO);
+            mCurStepPosition = savedInstanceState.getInt(RecipeUtil.STEP_POSITION,0);
         }
+
+        mTwoPane = getResources().getBoolean(R.bool.twoPane);
 
         if (mRecipe != null) {
             setTitle(mRecipe.getName());
             setupRecipeFragment(mRecipe);
 
-            if (findViewById(R.id.recipe_step_container)!=null) {
-                // This  will only exist in the two-pane tablet case
-                mTwoPane = true;
-                setupStepFragment(0,mRecipe);
-            } else {
-                mTwoPane = false;
+            if(mTwoPane) {
+                setupStepFragment(mCurStepPosition,mRecipe);
             }
         }
 
@@ -55,6 +58,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
         }
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putParcelable(RecipeUtil.RECIPE_INFO,mRecipe);
+        outState.putInt(RecipeUtil.STEP_POSITION,mCurStepPosition);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

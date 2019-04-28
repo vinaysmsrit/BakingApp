@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     @BindView(R.id.recipes_recyclerview)
     RecyclerView mRecyclerView;
 
+
+    boolean mTwoPane;
+
     RecipeAPI mRecipeAPI;
     RecipeListAdapter mAdapter;
 
@@ -47,13 +50,17 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
         mRecipeAPI = retrofit.create(RecipeAPI.class);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        mTwoPane = getResources().getBoolean(R.bool.twoPane);
+        int numColumns = mTwoPane ? 3: 1;
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this,numColumns);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new RecipeListAdapter(this);
-
         mRecyclerView.setAdapter(mAdapter);
+
+
 
         getAllRecipes();
     }
