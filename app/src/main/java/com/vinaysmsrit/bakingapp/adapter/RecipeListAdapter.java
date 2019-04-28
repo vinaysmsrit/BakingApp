@@ -1,6 +1,7 @@
 package com.vinaysmsrit.bakingapp.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,21 +52,19 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView recipeView;
+        CardView recipeCard;
         Recipe recipeItem;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
+            recipeCard = itemView.findViewById(R.id.card_view);
+            recipeCard.setOnClickListener(this);
             recipeView = itemView.findViewById(R.id.tv_recipe);
-            recipeView.setOnClickListener(this);
         }
 
         void bind(Recipe recipe) {
             recipeItem = recipe;
-            recipeView.append(" \n --------------------------------------------\n");
-            recipeView.append(" Recipe Item:"+recipe.getId()+"\n");
-            recipeView.append(" name:"+recipe.getName()+"\n");
-            recipeView.append(" servings:"+recipe.getServings()+"\n");
-            recipeView.append(" image:"+recipe.getImage()+"\n\n");
+            recipeView.setText(recipe.getName());
         }
 
         @Override

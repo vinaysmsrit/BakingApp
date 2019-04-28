@@ -16,6 +16,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/exo_player_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/poster_height" />
+
+            <ImageView
+                android:id="@+id/image_no_video"
+                android:layout_width="match_parent"
+                android:layout_height="275dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/novideo"
+                android:visibility="gone"/>
+
             <TextView
                 android:id="@+id/short_description_view"
                 android:layout_width="match_parent"
@@ -25,41 +38,9 @@
                 android:layout_marginLeft="@dimen/margin_12dp"
                 android:layout_marginRight="@dimen/margin_12dp"
                 android:layout_marginTop="@dimen/margin_4dp"
-                android:gravity="center"
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="18sp"
                 tools:text="@string/app_name" />
-
-            <!--
-            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                android:id="@+id/exo_player_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/poster_height" />
-                -->
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_no_video"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/no_video_available"
-                android:visibility="gone"
-                />
-
-            <TextView
-                android:id="@+id/video_url_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/margin_12dp"
-                android:layout_marginRight="@dimen/margin_12dp"
-                android:layout_marginTop="@dimen/margin_12dp"
-                android:gravity="left"
-                android:textColor="@color/colorPrimary"
-                android:textSize="13sp"
-                android:visibility="visible"
-                android:text="Description " />
 
             <TextView
                 android:id="@+id/step_details"

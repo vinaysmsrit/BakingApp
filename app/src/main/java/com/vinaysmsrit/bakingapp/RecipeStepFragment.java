@@ -7,13 +7,27 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.vinaysmsrit.bakingapp.model.Recipe;
 import com.vinaysmsrit.bakingapp.model.Steps;
 
@@ -46,15 +60,21 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
     private int mStepsCount = 0;
 
     private OnButtonInteractionListener mListener;
+    private TrackSelector trackSelector;
+    private SimpleExoPlayer exoPlayer;
+    private long position = 0;
 
     @BindView(R.id.step_details)
-    TextView mStepTextView;
+    TextView mDescriptionView;
 
     @BindView(R.id.short_description_view)
     TextView mShortDescription;
 
-    @BindView(R.id.video_url_view)
-    TextView mVideoUrl;
+    @BindView(R.id.exo_player_view)
+    SimpleExoPlayerView playerView;
+
+    @BindView(R.id.image_no_video)
+    ImageView mImgNoVideo;
 
     @BindView(R.id.prev_button)
     Button mPrevButton;
@@ -99,13 +119,57 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
             mCurStep = mRecipe.getSteps().get(mCurrentStepPosition);
         }
 
+        if (!TextUtils.isEmpty(mCurStep.getVideoURL())) {
+            initializePlayer(Uri.parse(mCurStep.getVideoURL()));
+        } else {
+            mImgNoVideo.setVisibility(View.VISIBLE);
+            playerView.setVisibility(View.GONE);
+        }
+
         Log.d(TAG,"onViewCreated VideoUrl: "+mCurStep.getVideoURL()+"\n" +
                 " Description:"+mCurStep.getDescription());
 
-        mShortDescription.setText("Step "+mCurrentStepPosition+" : "+mCurStep.getShortDescription());
-        mVideoUrl.setText("VideoUrl: "+mCurStep.getVideoURL());
-        mStepTextView.setText(" Description:"+mCurStep.getDescription());
+        mShortDescription.setText(mCurStep.getShortDescription());
+        mDescriptionView.setText(mCurStep.getDescription());
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        position = exoPlayer != null ? exoPlayer.getCurrentPosition() : 0;
+        releasePlayer();
+    }
+
+    private void initializePlayer(Uri mediaUri) {
+        if (exoPlayer == null) {
+            // Create an instance of the ExoPlayer.
+            trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            playerView.setPlayer(exoPlayer);
+
+            // Set the ExoPlayer.EventListener to this activity.
+            // exoPlayer.addListener(this);
+
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(getActivity(), getString(R.string.app_name));
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            exoPlayer.prepare(mediaSource);
+            exoPlayer.setPlayWhenReady(true);
+
+            exoPlayer.seekTo(0);
+        }
+    }
+
+    private void releasePlayer() {
+        if (exoPlayer != null) {
+            exoPlayer.setPlayWhenReady(false);
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+            trackSelector = null;
+        }
     }
 
     @Override
