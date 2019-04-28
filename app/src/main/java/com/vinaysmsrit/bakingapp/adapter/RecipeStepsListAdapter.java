@@ -11,15 +11,14 @@ import android.widget.TextView;
 
 import com.vinaysmsrit.bakingapp.Interfaces.IStepItemClickListener;
 import com.vinaysmsrit.bakingapp.R;
-import com.vinaysmsrit.bakingapp.RecipeInfoActivity;
-import com.vinaysmsrit.bakingapp.RecipeUtil;
+import com.vinaysmsrit.bakingapp.RecipeConstants;
 import com.vinaysmsrit.bakingapp.model.Steps;
 
 import java.util.List;
 
 public class RecipeStepsListAdapter extends RecyclerView.Adapter<RecipeStepsListAdapter.ViewHolder> {
 
-    private static final String TAG = RecipeUtil.APP_TAG + RecipeStepsListAdapter.class.getSimpleName();
+    private static final String TAG = RecipeConstants.APP_TAG + RecipeStepsListAdapter.class.getSimpleName();
     //private RecipeInfoActivity mParentActivity;
     private Context mContext;
     private List<Steps> mValues;

@@ -36,9 +36,9 @@ public class BakingAppWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        sharedPreferences = context.getSharedPreferences(RecipeUtil.SHARED_PREFERENCES,
+        sharedPreferences = context.getSharedPreferences(RecipeConstants.SHARED_PREFERENCES,
                 Context.MODE_PRIVATE);
-        String result = sharedPreferences.getString(RecipeUtil.WIDGET_VALUE, null);
+        String result = sharedPreferences.getString(RecipeConstants.WIDGET_VALUE, null);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager,result, appWidgetId);
         }

@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.vinaysmsrit.bakingapp.adapter.RecipeListAdapter;
 import com.vinaysmsrit.bakingapp.model.Ingredients;
 import com.vinaysmsrit.bakingapp.model.Recipe;
+import com.vinaysmsrit.bakingapp.views.RecipeInfoActivity;
 
 import java.util.List;
 
@@ -29,14 +29,10 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     @BindView(R.id.recipes_recyclerview)
     RecyclerView mRecyclerView;
 
-
     boolean mTwoPane;
-
     RecipeAPI mRecipeAPI;
     RecipeListAdapter mAdapter;
-
-
-    private static final String TAG = RecipeUtil.APP_TAG + MainActivity.class.getSimpleName();
+    private static final String TAG = RecipeConstants.APP_TAG + MainActivity.class.getSimpleName();
 
 
 
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         ButterKnife.bind(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RecipeUtil.RECIPE_BASE_URI)
+                .baseUrl(RecipeConstants.RECIPE_BASE_URI)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -63,10 +59,6 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
         mAdapter = new RecipeListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
-
-
-
 
         getAllRecipes();
     }
@@ -99,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         if (recipe != null) {
 
             if (recipe != null) {
-                SharedPreferences sharedPreferences = getSharedPreferences(RecipeUtil.SHARED_PREFERENCES,
+                SharedPreferences sharedPreferences = getSharedPreferences(RecipeConstants.SHARED_PREFERENCES,
                         Context.MODE_PRIVATE);
 
                 List<Ingredients> ingredientsList = recipe.getIngredients();
@@ -107,12 +99,11 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
                 for (Ingredients ingredient: ingredientsList) {
                     stringBuffer.append(String.format("\n * %s",ingredient.getIngredient()));
                 }
-
-                sharedPreferences.edit().putString(RecipeUtil.WIDGET_VALUE, stringBuffer.toString()).apply();
+                sharedPreferences.edit().putString(RecipeConstants.WIDGET_VALUE, stringBuffer.toString()).apply();
             }
 
             Intent recipeActivityIntent = new Intent(MainActivity.this,RecipeInfoActivity.class);
-            recipeActivityIntent.putExtra(RecipeUtil.RECIPE_INFO,recipe);
+            recipeActivityIntent.putExtra(RecipeConstants.RECIPE_INFO,recipe);
             startActivity(recipeActivityIntent);
         }
     }

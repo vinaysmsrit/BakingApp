@@ -1,4 +1,4 @@
-package com.vinaysmsrit.bakingapp;
+package com.vinaysmsrit.bakingapp.views;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,8 +29,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.vinaysmsrit.bakingapp.RecipeConstants;
 import com.vinaysmsrit.bakingapp.model.Recipe;
 import com.vinaysmsrit.bakingapp.model.Steps;
+import com.vinaysmsrit.bakingapp.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +47,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class RecipeStepFragment extends Fragment implements View.OnClickListener{
-    private static final String TAG = RecipeUtil.APP_TAG+RecipeStepFragment.class.getSimpleName();
+    private static final String TAG = RecipeConstants.APP_TAG+RecipeStepFragment.class.getSimpleName();
 
     Recipe mRecipe;
     Steps mCurStep;
@@ -86,9 +87,9 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if ((getArguments() != null)&&(getArguments().containsKey(RecipeUtil.RECIPE_INFO))) {
-            mRecipe = (Recipe) getArguments().getParcelable(RecipeUtil.RECIPE_INFO);
-            mCurrentStepPosition = getArguments().getInt(RecipeUtil.STEP_POSITION);
+        if ((getArguments() != null)&&(getArguments().containsKey(RecipeConstants.RECIPE_INFO))) {
+            mRecipe = (Recipe) getArguments().getParcelable(RecipeConstants.RECIPE_INFO);
+            mCurrentStepPosition = getArguments().getInt(RecipeConstants.STEP_POSITION);
         }
     }
 

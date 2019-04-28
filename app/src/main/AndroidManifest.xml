@@ -19,14 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecipeInfoActivity"
+            android:name=".views.RecipeInfoActivity"
             android:label="@string/title_recipe_list"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vinaysmsrit.bakingapp.MainActivity" />
         </activity>
-        <activity android:name=".RecipeStepActivity"></activity>
+        <activity android:name=".views.RecipeStepActivity"></activity>
 
         <receiver android:name=".BakingAppWidget">
             <intent-filter>

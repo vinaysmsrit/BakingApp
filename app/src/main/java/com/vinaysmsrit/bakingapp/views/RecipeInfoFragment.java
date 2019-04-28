@@ -1,4 +1,4 @@
-package com.vinaysmsrit.bakingapp;
+package com.vinaysmsrit.bakingapp.views;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.vinaysmsrit.bakingapp.Interfaces.IStepClicked;
 import com.vinaysmsrit.bakingapp.Interfaces.IStepItemClickListener;
+import com.vinaysmsrit.bakingapp.R;
 import com.vinaysmsrit.bakingapp.adapter.RecipeStepsListAdapter;
 import com.vinaysmsrit.bakingapp.model.Ingredients;
 import com.vinaysmsrit.bakingapp.model.Recipe;

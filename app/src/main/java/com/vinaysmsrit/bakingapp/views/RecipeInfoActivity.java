@@ -1,23 +1,22 @@
-package com.vinaysmsrit.bakingapp;
+package com.vinaysmsrit.bakingapp.views;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
+
 
 import com.vinaysmsrit.bakingapp.Interfaces.IStepClicked;
-import com.vinaysmsrit.bakingapp.model.Recipe;
-import com.vinaysmsrit.bakingapp.model.Steps;
 import com.vinaysmsrit.bakingapp.R;
+import com.vinaysmsrit.bakingapp.RecipeConstants;
+import com.vinaysmsrit.bakingapp.model.Recipe;
 
 public class RecipeInfoActivity extends AppCompatActivity implements IStepClicked, RecipeStepFragment.OnButtonInteractionListener {
 
-    private static final String TAG = RecipeUtil.APP_TAG + RecipeInfoActivity.class.getSimpleName();
+    private static final String TAG = RecipeConstants.APP_TAG + RecipeInfoActivity.class.getSimpleName();
 
     public Recipe getRecipe() {
         return mRecipe;
@@ -34,12 +33,12 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
 
 
         Intent intent = getIntent();
-        if (intent.hasExtra(RecipeUtil.RECIPE_INFO)) {
+        if (intent.hasExtra(RecipeConstants.RECIPE_INFO)) {
             Log.d(TAG," RECIPE_INFO conatined ");
-            mRecipe = getIntent().getParcelableExtra(RecipeUtil.RECIPE_INFO);
+            mRecipe = getIntent().getParcelableExtra(RecipeConstants.RECIPE_INFO);
         } else if (savedInstanceState != null){
-            mRecipe = savedInstanceState.getParcelable(RecipeUtil.RECIPE_INFO);
-            mCurStepPosition = savedInstanceState.getInt(RecipeUtil.STEP_POSITION,0);
+            mRecipe = savedInstanceState.getParcelable(RecipeConstants.RECIPE_INFO);
+            mCurStepPosition = savedInstanceState.getInt(RecipeConstants.STEP_POSITION,0);
         }
 
         mTwoPane = getResources().getBoolean(R.bool.twoPane);
@@ -62,8 +61,8 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        outState.putParcelable(RecipeUtil.RECIPE_INFO,mRecipe);
-        outState.putInt(RecipeUtil.STEP_POSITION,mCurStepPosition);
+        outState.putParcelable(RecipeConstants.RECIPE_INFO,mRecipe);
+        outState.putInt(RecipeConstants.STEP_POSITION,mCurStepPosition);
     }
 
 
@@ -91,15 +90,14 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
     @Override
     public void onStepClicked(int position) {
         Log.d(TAG,"onStepClicked currentStep position= "+position);
-        Toast.makeText(this,"Step pos="+position+" clicked", Toast.LENGTH_LONG).show();
         setupStepFragment(position, mRecipe);
     }
 
     private void setupStepFragment(int position, Recipe recipe) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(RecipeUtil.RECIPE_INFO,recipe);
-            arguments.putInt(RecipeUtil.STEP_POSITION,position);
+            arguments.putParcelable(RecipeConstants.RECIPE_INFO,recipe);
+            arguments.putInt(RecipeConstants.STEP_POSITION,position);
             RecipeStepFragment fragment = new RecipeStepFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -107,8 +105,8 @@ public class RecipeInfoActivity extends AppCompatActivity implements IStepClicke
                     .commit();
         } else {
             Intent recipeStepActivityIntent = new Intent(RecipeInfoActivity.this,RecipeStepActivity.class);
-            recipeStepActivityIntent.putExtra(RecipeUtil.STEP_POSITION,position);
-            recipeStepActivityIntent.putExtra(RecipeUtil.RECIPE_INFO,mRecipe);
+            recipeStepActivityIntent.putExtra(RecipeConstants.STEP_POSITION,position);
+            recipeStepActivityIntent.putExtra(RecipeConstants.RECIPE_INFO,mRecipe);
             startActivity(recipeStepActivityIntent);
         }
     }
