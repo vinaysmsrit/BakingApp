@@ -4,14 +4,6 @@
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="default_padding">16dp</dimen>
-    <dimen name="margin_4dp">4dp</dimen>
-    <dimen name="margin_8dp">8dp</dimen>
-    <dimen name="margin_12dp">12dp</dimen>
-    <dimen name="margin_16dp">16dp</dimen>
-    <dimen name="margin_32dp">32dp</dimen>
-    <dimen name="padding_8dp">8dp</dimen>
-    <dimen name="padding_16dp">16dp</dimen>
-    <dimen name="padding_32dp">32dp</dimen>
     <dimen name="ingredient_icon_size">32dp</dimen>
     <dimen name="recipe_image_height">250dp</dimen>
     <dimen name="poster_width">187dp</dimen>
@@ -26,4 +18,10 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="recipe_item_img_height">200dp</dimen>
     <dimen name="recipe_item_img_margin">5dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

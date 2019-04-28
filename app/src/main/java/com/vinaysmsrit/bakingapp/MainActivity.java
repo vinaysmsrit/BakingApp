@@ -1,6 +1,8 @@
 package com.vinaysmsrit.bakingapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.vinaysmsrit.bakingapp.adapter.RecipeListAdapter;
+import com.vinaysmsrit.bakingapp.model.Ingredients;
 import com.vinaysmsrit.bakingapp.model.Recipe;
 
 import java.util.List;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
     RecipeAPI mRecipeAPI;
     RecipeListAdapter mAdapter;
+
 
     private static final String TAG = RecipeUtil.APP_TAG + MainActivity.class.getSimpleName();
 
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
         mAdapter = new RecipeListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+
 
 
 
@@ -91,7 +97,20 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     @Override
     public void onRecipeItemClick(Recipe recipe) {
         if (recipe != null) {
-            Toast.makeText(this,"Item Clicked Recipe : "+recipe.getId()+" name:"+recipe.getName(),Toast.LENGTH_LONG).show();
+
+            if (recipe != null) {
+                SharedPreferences sharedPreferences = getSharedPreferences(RecipeUtil.SHARED_PREFERENCES,
+                        Context.MODE_PRIVATE);
+
+                List<Ingredients> ingredientsList = recipe.getIngredients();
+                StringBuffer stringBuffer = new StringBuffer(recipe.getName());
+                for (Ingredients ingredient: ingredientsList) {
+                    stringBuffer.append(String.format("\n * %s",ingredient.getIngredient()));
+                }
+
+                sharedPreferences.edit().putString(RecipeUtil.WIDGET_VALUE, stringBuffer.toString()).apply();
+            }
+
             Intent recipeActivityIntent = new Intent(MainActivity.this,RecipeInfoActivity.class);
             recipeActivityIntent.putExtra(RecipeUtil.RECIPE_INFO,recipe);
             startActivity(recipeActivityIntent);
