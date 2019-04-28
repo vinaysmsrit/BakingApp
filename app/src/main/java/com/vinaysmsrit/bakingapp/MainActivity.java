@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinaysmsrit.bakingapp.adapter.RecipeListAdapter;
@@ -30,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     RecipeAPI mRecipeAPI;
     RecipeListAdapter mAdapter;
 
+    private static final String TAG = RecipeUtil.APP_TAG + MainActivity.class.getSimpleName();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
         ButterKnife.bind(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://d17h27t6h515a5.cloudfront.net")
+                .baseUrl(RecipeUtil.RECIPE_BASE_URI)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
 
                 if(!response.isSuccessful()) {
-                    Log.d("VIN","Response Failed Code: "+response.code());
+                    Log.d(TAG,"Response Failed Code: "+response.code());
                     return;
                 }
 
@@ -73,17 +76,17 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.d("VIN","Error Retriving Posts");
+                Log.d(TAG,"Error Retriving Posts");
             }
         });
     }
 
     @Override
-    public void onItemClick(Recipe recipe) {
+    public void onRecipeItemClick(Recipe recipe) {
         if (recipe != null) {
             Toast.makeText(this,"Item Clicked Recipe : "+recipe.getId()+" name:"+recipe.getName(),Toast.LENGTH_LONG).show();
-            Intent recipeActivityIntent = new Intent(MainActivity.this,RecipeListActivity.class);
-            recipeActivityIntent.putExtra(RecipeUtil.RECIPE_DETAIL_EXTRA,recipe);
+            Intent recipeActivityIntent = new Intent(MainActivity.this,RecipeInfoActivity.class);
+            recipeActivityIntent.putExtra(RecipeUtil.RECIPE_INFO,recipe);
             startActivity(recipeActivityIntent);
         }
     }
