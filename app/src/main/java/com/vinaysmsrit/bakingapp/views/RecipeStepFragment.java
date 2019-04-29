@@ -157,22 +157,15 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
 
     private void initializePlayer(Uri mediaUri) {
         if (exoPlayer == null) {
-            // Create an instance of the ExoPlayer.
             trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             exoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             playerView.setPlayer(exoPlayer);
-
-            // Set the ExoPlayer.EventListener to this activity.
-            // exoPlayer.addListener(this);
-
-            // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getActivity(), getString(R.string.app_name));
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             exoPlayer.prepare(mediaSource);
             exoPlayer.setPlayWhenReady(true);
-
             exoPlayer.seekTo(0);
         }
     }

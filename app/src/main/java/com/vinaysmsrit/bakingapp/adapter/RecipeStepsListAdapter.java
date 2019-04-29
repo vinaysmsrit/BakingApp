@@ -19,7 +19,6 @@ import java.util.List;
 public class RecipeStepsListAdapter extends RecyclerView.Adapter<RecipeStepsListAdapter.ViewHolder> {
 
     private static final String TAG = RecipeConstants.APP_TAG + RecipeStepsListAdapter.class.getSimpleName();
-    //private RecipeInfoActivity mParentActivity;
     private Context mContext;
     private List<Steps> mValues;
     private boolean mTwoPane;
@@ -45,10 +44,8 @@ public class RecipeStepsListAdapter extends RecyclerView.Adapter<RecipeStepsList
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Log.d(TAG," onBindViewHolder : "+String.format("Step %d",mValues.get(position).getStepId()));
         holder.mStepInfoView.setText((mValues.get(position).getStepId()+1)+". "+mValues.get(position).getShortDescription());
         holder.itemView.setTag(mValues.get(position));
-        //holder.itemView.setOnClickListener(mOnClickListener);
     }
 
     @Override
